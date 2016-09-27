@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+STATIC_ROOT = "/srv/www/mozio/mozio-test/static"
 # Application definition
 
 INSTALLED_APPS = [
@@ -83,7 +83,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'moziotest',
-        'USER': 'ayushr',
+        'USER': 'shouvik',
+        'PASSWORD':'svk*2263',
+	'HOST': 'localhost'
     }
 }
 
