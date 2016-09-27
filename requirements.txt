@@ -1,0 +1,6 @@
+GDAL==1.11.3
+kerberos==1.2.4
+simplejson==3.8.2
+urllib2-kerberos==0.1.6
+virtualenv==15.0.3
+geomet==0.1.1
