@@ -20,6 +20,9 @@ class Provider(User, DateTimeMixin):
     currency = models.CharField(max_length=3)
     phone_number = models.CharField(max_length=15)
 
+    def __unicode__(self):
+        return self.name
+
     def save(self, *args, **kwargs):
         create_token = False
         try:
@@ -27,10 +30,10 @@ class Provider(User, DateTimeMixin):
         except Provider.DoesNotExist:
             create_token = True
 
-        self.username = self.email
+        self.username = self.email  # setting username as email as username taken in api
         super(Provider, self).save(*args, **kwargs)
         if create_token:
-            Token.objects.create(user=self)
+            Token.objects.create(user=self)  # creating token for provider auth
 
 
 class ServiceArea(DateTimeMixin):
@@ -38,7 +41,7 @@ class ServiceArea(DateTimeMixin):
     provider = models.ForeignKey('Provider', related_name="service_areas")
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    polygon = models.PolygonField(geography=True)
+    polygon = models.PolygonField(geography=True)  # Polygon field with 3d measurements from GeoDjango
 
     def __unicode__(self):
         return self.name

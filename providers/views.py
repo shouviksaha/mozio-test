@@ -19,6 +19,7 @@ from providers.models import Provider, ServiceArea
 from providers.serializers import ProviderSerializer, ServiceAreaSerializer, ServiceAreaQueryResponseSerializer
 from providers.utils import InvalidArgumentsException
 
+# using django rest framework for creating the APIs
 
 class ProviderListView(generics.ListCreateAPIView):
     """
