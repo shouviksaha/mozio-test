@@ -16,7 +16,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from providers.models import Provider, ServiceArea
-from providers.serializers import ProviderSerializer, ServiceAreaSerializer, ServiceAreaQueryResponseSerializer
+from providers.serializers import ProviderSerializer, ServiceAreaSerializer, ServiceAreaQueryResponseSerializer, \
+    GenerateTokenQuerySerializer
 from providers.utils import InvalidArgumentsException
 
 # using django rest framework for creating the APIs
@@ -96,3 +97,22 @@ class ServiceAreaQueryView(APIView):
             return Response(serializer.data)
         else:
             raise InvalidArgumentsException
+
+class GenerateTokenView(APIView):
+    """
+        Generate token by providing email
+    """
+
+    serializer_class = GenerateTokenQuerySerializer
+    def post(self, request, *args, **kwargs):
+        email = request.data.get('email',None)
+        if email:
+            try:
+                provider = Provider.objects.get(email=email)
+                return Response({'token': provider.auth_token.key},status=status.HTTP_200_OK)
+            except Provider.DoesNotExist:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+
+        else:
+            raise InvalidArgumentsException
+

@@ -1,11 +1,10 @@
+import re
 from rest_framework import serializers
 
 from providers.models import Provider, ServiceArea
 
 
 class ProviderSerializer(serializers.ModelSerializer):
-    auth_token = serializers.ReadOnlyField(
-        source='auth_token.key')  # displaying token for all providers for the sake of assignment.
     id = serializers.ReadOnlyField()
 
     def validate_currency(self, value):
@@ -13,11 +12,18 @@ class ProviderSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Please enter proper currency values")
         return value
 
-    # no validation for phone as I'm not sure about the input format
+    # simple validation for phone as I'm not sure about the input format
+
+    def validate_phone_number(self, value):
+        # phone numbers shouldn't contain letters. Ignoring .ext. Minimum length of 8 include country code
+        if re.search('[a-zA-Z]', value) or len(value) < 8:
+            raise serializers.ValidationError("Please enter proper phone_number")
+
+        return value
 
     class Meta:
         model = Provider
-        fields = ('name', 'email', 'language', 'currency', 'phone_number', 'auth_token', 'id')
+        fields = ('name', 'email', 'language', 'currency', 'phone_number', 'id')
 
 
 class ServiceAreaSerializer(serializers.ModelSerializer):
@@ -36,3 +42,7 @@ class ServiceAreaQueryResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceArea
         fields = ('name', 'price', 'provider')
+
+
+class GenerateTokenQuerySerializer(serializers.Serializer):
+    email = serializers.EmailField()

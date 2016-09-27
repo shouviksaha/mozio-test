@@ -6,6 +6,7 @@ from providers import views
 
 urlpatterns = [
     url(r'^providers/$', views.ProviderListView.as_view()),
+    url(r'^providers/get_token$', views.GenerateTokenView.as_view()),
     url(r'^providers/(?P<pk>[0-9]+)$', views.ProviderDetailView.as_view()),
     url(r'^areas/$', views.ServiceAreaListView.as_view()),
     url(r'^areas/(?P<pk>[0-9]+)$', views.ServiceAreaDetailView.as_view()),
